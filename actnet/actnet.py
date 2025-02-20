@@ -9,7 +9,7 @@ import math
 
 from tensor_layers_CoMERA.layers import wrapped_linear_layers, config_class
 
-from utils import rank_shape_lookup
+from .utils import rank_shape_lookup
 
 identity = lambda x : x
 
