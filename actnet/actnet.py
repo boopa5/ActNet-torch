@@ -9,7 +9,7 @@ import math
 
 from tensor_layers_CoMERA.layers import wrapped_linear_layers, config_class
 
-from .utils import rank_shape_lookup
+from .utils import *
 
 identity = lambda x : x
 
@@ -210,6 +210,9 @@ class ActNet(nn.Module):
             ))
         self.act_layers = nn.ParameterList(act_layers)
         self.output_activation = output_activation
+
+        self.register_forward_pre_hook(reshape_input_hook)
+        self.register_forward_hook(reshape_output_hook)
 
     def forward(self, x):
         x = x * self.w0

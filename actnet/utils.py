@@ -46,3 +46,25 @@ def split_tensor_rank_params(model):
             par_origin.append(par)
     
     return par_tensor, par_origin, par_rank
+
+
+# add hook to reshape batch to first dim
+def reshape_input_hook(module, input):
+    input_ = input[0]
+
+    if input_.dim() > 2:
+        # print("input shape", input_.shape)
+        hidden_size = input_.shape[-1]
+        module.B = input_.shape[0]
+        input_ = input_.reshape(-1, hidden_size)
+        # print("new input shape", input_.shape)
+        input = (input_,)
+    return input
+
+
+def reshape_output_hook(module, input, output):
+
+    if output.dim() == 2:
+        hidden_size = output.shape[-1]
+        output = output.reshape(module.B, -1, hidden_size)
+    return output
